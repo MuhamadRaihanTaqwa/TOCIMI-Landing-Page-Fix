@@ -84,13 +84,13 @@ const Contact = () => {
             <div className="pt-6">
               <h3 className="font-semibold text-foreground mb-4">Ikuti Kami di Instagram</h3>
               <a
-                href="https://instagram.com/tocimi"
+                href="https://www.instagram.com/tokocimi_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737] text-white px-6 py-3 rounded-full hover:scale-105 transition-transform"
               >
                 <Instagram className="w-6 h-6" />
-                <span className="font-medium">@tocimi</span>
+                <span className="font-medium">@tokocimi_</span>
               </a>
             </div>
           </div>

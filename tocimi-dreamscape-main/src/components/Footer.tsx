@@ -26,13 +26,13 @@ const Footer = () => {
               Toko fashion wanita terlengkap dengan koleksi trendy dan elegan untuk menemani setiap momen spesialmu.
             </p>
             <a
-              href="https://instagram.com/tocimi"
+              href="https://www.instagram.com/tokocimi_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
             >
               <Instagram className="w-5 h-5" />
-              <span>@tocimi</span>
+              <span>@tokocimi_</span>
             </a>
           </div>
 
