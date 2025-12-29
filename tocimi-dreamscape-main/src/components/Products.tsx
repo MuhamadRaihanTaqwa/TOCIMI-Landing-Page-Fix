@@ -9,6 +9,11 @@ import productMakeup from "@/assets/product-makeup.jpg";
 import productShoes from "@/assets/product-shoes.jpg";
 import productAccessories from "@/assets/product-accessories.jpg";
 import productPants from "@/assets/product-pants.jpg";
+import tasTocimi from "@/assets/tas tocimi.png";
+import tas2 from "@/assets/tas 2.png";
+import tas3 from "@/assets/tas 3.png";
+import tas4 from "@/assets/tas 4.png";
+import tas5 from "@/assets/tas 5.png";
 
 const products = [
   {
@@ -20,15 +25,7 @@ const products = [
     image: productDress,
     isNew: true,
   },
-  {
-    id: 2,
-    name: "Mini Sling Bag Pink",
-    category: "Tas",
-    price: "Rp 125.000",
-    description: "Tas selempang compact untuk daily use",
-    image: productBag,
-    isNew: false,
-  },
+
   {
     id: 3,
     name: "Lip Tint Set 3in1",
@@ -64,6 +61,51 @@ const products = [
     description: "Celana kulot nyaman dan kekinian",
     image: productPants,
     isNew: false,
+  },
+  {
+    id: 7,
+    name: "Tas Tocimi",
+    category: "Tas",
+    price: "Rp 150.000",
+    description: "Tas fashion Tocimi stylish dan modern",
+    image: tasTocimi,
+    isNew: true,
+  },
+  {
+    id: 8,
+    name: "Tas Style 2",
+    category: "Tas",
+    price: "Rp 145.000",
+    description: "Tas selempang dengan desain elegan",
+    image: tas2,
+    isNew: true,
+  },
+  {
+    id: 9,
+    name: "Tas Style 3",
+    category: "Tas",
+    price: "Rp 160.000",
+    description: "Tas tote besar untuk sehari-hari",
+    image: tas3,
+    isNew: true,
+  },
+  {
+    id: 10,
+    name: "Tas Style 4",
+    category: "Tas",
+    price: "Rp 155.000",
+    description: "Tas mini compact dan praktis",
+    image: tas4,
+    isNew: true,
+  },
+  {
+    id: 11,
+    name: "Tas Style 5",
+    category: "Tas",
+    price: "Rp 170.000",
+    description: "Tas backpack multifungsi",
+    image: tas5,
+    isNew: true,
   },
 ];
 
@@ -209,6 +251,19 @@ const Products = () => {
                   </div>
                 </Card>
               ))}
+            </div>
+            <div className="text-center mt-8">
+              <Button
+                size="lg"
+                onClick={() => {
+                  const phoneNumber = "6285559443785";
+                  const message = `Halo TOCIMI! Saya ingin memesan:\n${cart.map(p => `- ${p.name} (${p.price})`).join('\n')}`;
+                  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                  window.open(whatsappUrl, '_blank');
+                }}
+              >
+                Next Order via WhatsApp
+              </Button>
             </div>
           </div>
         )}
