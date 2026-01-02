@@ -11,59 +11,59 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Cream/Off-white background */
-    --background: 40 60% 97%;
-    --foreground: 0 30% 10%;
+    /* Black background */
+    --background: 0 0% 5%;
+    --foreground: 0 0% 98%;
 
-    /* Cream card */
-    --card: 40 60% 97%;
-    --card-foreground: 0 30% 10%;
+    /* Dark gray card */
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 40 50% 95%;
-    --popover-foreground: 0 30% 10%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 98%;
 
     /* Pink Coral as primary */
     --primary: 352 62% 65%;
-    --primary-foreground: 40 60% 97%;
+    --primary-foreground: 0 0% 5%;
 
-    /* Purple as secondary */
-    --secondary: 269 28% 42%;
-    --secondary-foreground: 40 60% 97%;
+    /* Gray as secondary */
+    --secondary: 0 0% 25%;
+    --secondary-foreground: 0 0% 98%;
 
-    /* Muted cream tones */
-    --muted: 40 30% 90%;
-    --muted-foreground: 0 30% 35%;
+    /* Muted gray tones */
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 65%;
 
-    /* Pink accent */
-    --accent: 352 62% 95%;
-    --accent-foreground: 352 62% 55%;
+    /* Gray-pink accent */
+    --accent: 352 15% 30%;
+    --accent-foreground: 0 0% 98%;
 
-    /* Dark brown for destructive */
-    --destructive: 0 50% 40%;
-    --destructive-foreground: 40 60% 97%;
+    /* Dark gray for destructive */
+    --destructive: 0 0% 35%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 40 20% 85%;
-    --input: 40 20% 85%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
     --ring: 352 62% 65%;
 
     --radius: 1.5rem;
 
-    --sidebar-background: 40 60% 97%;
-    --sidebar-foreground: 0 30% 10%;
+    --sidebar-background: 0 0% 96%;
+    --sidebar-foreground: 0 0% 10%;
     --sidebar-primary: 352 62% 65%;
-    --sidebar-primary-foreground: 40 60% 97%;
-    --sidebar-accent: 269 28% 42%;
-    --sidebar-accent-foreground: 40 60% 97%;
-    --sidebar-border: 40 20% 85%;
+    --sidebar-primary-foreground: 0 0% 97%;
+    --sidebar-accent: 0 0% 42%;
+    --sidebar-accent-foreground: 0 0% 97%;
+    --sidebar-border: 0 0% 85%;
     --sidebar-ring: 352 62% 65%;
 
     --chart-1: 352 62% 65%;
-    --chart-2: 269 28% 42%;
+    --chart-2: 0 0% 42%;
     --chart-3: 352 62% 75%;
-    --chart-4: 269 28% 55%;
-    --chart-5: 0 30% 10%;
+    --chart-4: 0 0% 55%;
+    --chart-5: 0 0% 10%;
 
-    --sidebar: 40 60% 97%;
+    --sidebar: 0 0% 96%;
 
     --font-sans: 'Poppins', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
     --font-serif: 'Merriweather', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;

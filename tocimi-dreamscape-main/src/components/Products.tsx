@@ -3,70 +3,21 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useCart } from "@/contexts/CartContext";
 import { useState } from "react";
-import productDress from "@/assets/product-dress.jpg";
-import productBag from "@/assets/product-bag.jpg";
-import productMakeup from "@/assets/product-makeup.jpg";
-import productShoes from "@/assets/product-shoes.jpg";
-import productAccessories from "@/assets/product-accessories.jpg";
-import productPants from "@/assets/product-pants.jpg";
 import tasTocimi from "@/assets/tas tocimi.png";
 import tas2 from "@/assets/tas 2.png";
 import tas3 from "@/assets/tas 3.png";
 import tas4 from "@/assets/tas 4.png";
 import tas5 from "@/assets/tas 5.png";
+import tas6 from "@/assets/tas 6.jpeg";
+import tas7 from "@/assets/tas 7.jpeg";
+import tas8 from "@/assets/tas 8.jpeg";
 
 const products = [
-  {
-    id: 1,
-    name: "Floral Summer Dress",
-    category: "Baju",
-    price: "Rp 189.000",
-    description: "Dress motif bunga cantik untuk tampil fresh",
-    image: productDress,
-    isNew: true,
-  },
-
-  {
-    id: 3,
-    name: "Lip Tint Set 3in1",
-    category: "Makeup",
-    price: "Rp 85.000",
-    description: "Set lip tint warna natural tahan lama",
-    image: productMakeup,
-    isNew: true,
-  },
-  {
-    id: 4,
-    name: "Block Heels 5cm",
-    category: "Sepatu",
-    price: "Rp 165.000",
-    description: "Heels nyaman untuk kerja dan hangout",
-    image: productShoes,
-    isNew: false,
-  },
-  {
-    id: 5,
-    name: "Pearl Earrings Set",
-    category: "Aksesoris",
-    price: "Rp 45.000",
-    description: "Anting mutiara elegant untuk segala acara",
-    image: productAccessories,
-    isNew: true,
-  },
-  {
-    id: 6,
-    name: "Kulot Highwaist Hitam",
-    category: "Celana",
-    price: "Rp 135.000",
-    description: "Celana kulot nyaman dan kekinian",
-    image: productPants,
-    isNew: false,
-  },
   {
     id: 7,
     name: "Tas Tocimi",
     category: "Tas",
-    price: "Rp 150.000",
+    price: "Rp 65.000",
     description: "Tas fashion Tocimi stylish dan modern",
     image: tasTocimi,
     isNew: true,
@@ -75,7 +26,7 @@ const products = [
     id: 8,
     name: "Tas Style 2",
     category: "Tas",
-    price: "Rp 145.000",
+    price: "Rp 70.000",
     description: "Tas selempang dengan desain elegan",
     image: tas2,
     isNew: true,
@@ -84,7 +35,7 @@ const products = [
     id: 9,
     name: "Tas Style 3",
     category: "Tas",
-    price: "Rp 160.000",
+    price: "Rp 85.000",
     description: "Tas tote besar untuk sehari-hari",
     image: tas3,
     isNew: true,
@@ -93,7 +44,7 @@ const products = [
     id: 10,
     name: "Tas Style 4",
     category: "Tas",
-    price: "Rp 155.000",
+    price: "Rp 85.000",
     description: "Tas mini compact dan praktis",
     image: tas4,
     isNew: true,
@@ -102,14 +53,41 @@ const products = [
     id: 11,
     name: "Tas Style 5",
     category: "Tas",
-    price: "Rp 170.000",
+    price: "Rp 85.000",
     description: "Tas backpack multifungsi",
     image: tas5,
     isNew: true,
   },
+  {
+    id: 12,
+    name: "Tas Style 6",
+    category: "Tas",
+    price: "Rp 45.000",
+    description: "Tas style 6 dengan desain unik",
+    image: tas6,
+    isNew: true,
+  },
+  {
+    id: 13,
+    name: "Tas Style 7",
+    category: "Tas",
+    price: "Rp 45.000",
+    description: "Tas style 7 praktis dan stylish",
+    image: tas7,
+    isNew: true,
+  },
+  {
+    id: 14,
+    name: "Tas Style 8",
+    category: "Tas",
+    price: "Rp 65.000",
+    description: "Tas style 8 elegan dan modern",
+    image: tas8,
+    isNew: true,
+  },
 ];
 
-const categories = ["Semua", "Baju", "Tas", "Makeup", "Sepatu", "Aksesoris", "Celana"];
+const categories = ["Semua", "Tas"];
 
 const Products = () => {
   const { cart, favorites, cartCount, favoritesCount, addToCart, removeFromCart, toggleFavorite, isInCart, isFavorite } = useCart();
