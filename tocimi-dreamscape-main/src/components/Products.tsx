@@ -2,96 +2,38 @@ import { Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useCart } from "@/contexts/CartContext";
-import { useState } from "react";
-import tasTocimi from "@/assets/tas tocimi.png";
-import tas2 from "@/assets/tas 2.png";
-import tas3 from "@/assets/tas 3.png";
-import tas4 from "@/assets/tas 4.png";
-import tas5 from "@/assets/tas 5.png";
-import tas6 from "@/assets/tas 6.jpeg";
-import tas7 from "@/assets/tas 7.jpeg";
-import tas8 from "@/assets/tas 8.jpeg";
+import { useState, useEffect } from "react";
+import { db } from "@/lib/firebase";
+import { collection, onSnapshot } from "firebase/firestore";
 
-const products = [
-  {
-    id: 7,
-    name: "Tas Tocimi",
-    category: "Tas",
-    price: "Rp 65.000",
-    description: "Tas fashion Tocimi stylish dan modern",
-    image: tasTocimi,
-    isNew: true,
-  },
-  {
-    id: 8,
-    name: "Tas Style 2",
-    category: "Tas",
-    price: "Rp 70.000",
-    description: "Tas selempang dengan desain elegan",
-    image: tas2,
-    isNew: true,
-  },
-  {
-    id: 9,
-    name: "Tas Style 3",
-    category: "Tas",
-    price: "Rp 85.000",
-    description: "Tas tote besar untuk sehari-hari",
-    image: tas3,
-    isNew: true,
-  },
-  {
-    id: 10,
-    name: "Tas Style 4",
-    category: "Tas",
-    price: "Rp 85.000",
-    description: "Tas mini compact dan praktis",
-    image: tas4,
-    isNew: true,
-  },
-  {
-    id: 11,
-    name: "Tas Style 5",
-    category: "Tas",
-    price: "Rp 85.000",
-    description: "Tas backpack multifungsi",
-    image: tas5,
-    isNew: true,
-  },
-  {
-    id: 12,
-    name: "Tas Style 6",
-    category: "Tas",
-    price: "Rp 45.000",
-    description: "Tas style 6 dengan desain unik",
-    image: tas6,
-    isNew: true,
-  },
-  {
-    id: 13,
-    name: "Tas Style 7",
-    category: "Tas",
-    price: "Rp 45.000",
-    description: "Tas style 7 praktis dan stylish",
-    image: tas7,
-    isNew: true,
-  },
-  {
-    id: 14,
-    name: "Tas Style 8",
-    category: "Tas",
-    price: "Rp 65.000",
-    description: "Tas style 8 elegan dan modern",
-    image: tas8,
-    isNew: true,
-  },
-];
+interface Product {
+  id: string;
+  name: string;
+  category: string;
+  price: string;
+  description: string;
+  image: string;
+  isNew: boolean;
+}
 
 const categories = ["Semua", "Tas"];
 
 const Products = () => {
   const { cart, favorites, cartCount, favoritesCount, addToCart, removeFromCart, toggleFavorite, isInCart, isFavorite } = useCart();
   const [selectedCategory, setSelectedCategory] = useState("Semua");
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'products'), (snapshot) => {
+      const productsData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Product[];
+      setProducts(productsData);
+    });
+
+    return unsubscribe;
+  }, []);
 
   const filteredProducts = selectedCategory === "Semua"
     ? products

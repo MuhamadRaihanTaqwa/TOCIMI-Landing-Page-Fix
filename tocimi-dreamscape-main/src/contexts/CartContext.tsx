@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 export interface Product {
-  id: number;
+  id: string;
   name: string;
   category: string;
   price: string;
@@ -16,8 +16,8 @@ interface CartContextType {
   addToCart: (product: Product) => void;
   removeFromCart: (product: Product) => void;
   toggleFavorite: (product: Product) => void;
-  isInCart: (productId: number) => boolean;
-  isFavorite: (productId: number) => boolean;
+  isInCart: (productId: string) => boolean;
+  isFavorite: (productId: string) => boolean;
   cartCount: number;
   favoritesCount: number;
 }
@@ -87,11 +87,11 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     });
   };
 
-  const isInCart = (productId: number) => {
+  const isInCart = (productId: string) => {
     return cart.some(item => item.id === productId);
   };
 
-  const isFavorite = (productId: number) => {
+  const isFavorite = (productId: string) => {
     return favorites.some(item => item.id === productId);
   };
 
