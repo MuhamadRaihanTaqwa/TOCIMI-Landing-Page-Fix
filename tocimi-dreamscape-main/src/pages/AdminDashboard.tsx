@@ -31,14 +31,134 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
-    category: '',
     price: '',
-    description: '',
+    category: 'Tas',
+    isNewCategory: false,
+    newCategoryName: '',
     imageFile: null as File | null,
     isNew: false,
   });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type } = e.target;
+    if (type === 'checkbox') {
+      const checked = (e.target as HTMLInputElement).checked;
+      setFormData(prev => {
+        const newData = { ...prev, [name]: checked };
+
+        // If unchecking new category, reset category to Tas
+        if (name === 'isNewCategory' && !checked) {
+          newData.category = 'Tas';
+          newData.newCategoryName = '';
+        }
+        return newData;
+      });
+    } else {
+      setFormData(prev => {
+        const newData = { ...prev, [name]: value };
+
+        // Auto-set category based on newCategoryName
+        if (name === 'newCategoryName' && value.trim()) {
+          newData.category = value.trim();
+        }
+
+        return newData;
+      });
+    }
+  };
+
+  const uploadImage = async (file: File): Promise<string> => {
+    const storageRef = ref(storage, `products/${Date.now()}_${file.name}`);
+    await uploadBytes(storageRef, file);
+    return await getDownloadURL(storageRef);
+  };
+
+  // Validate price starts with "Rp."
+  const validatePrice = (price: string) => {
+    return price.startsWith('Rp.');
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isSubmitting) return;
+
+    // Validate price format
+    if (!validatePrice(formData.price)) {
+      toast.error('Harga harus dimulai dengan "Rp."');
+      return;
+    }
+
+    // Validate new category name if checkbox is checked
+    if (formData.isNewCategory && !formData.newCategoryName.trim()) {
+      toast.error('Nama kategori baru harus diisi');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      let imageUrl = editingProduct?.image || '';
+
+      // Upload image if provided
+      if (formData.imageFile) {
+        console.log('Uploading image...', formData.imageFile.name);
+        try {
+          imageUrl = await uploadImage(formData.imageFile);
+          console.log('Image uploaded successfully:', imageUrl);
+        } catch (uploadError) {
+          console.error('Image upload failed:', uploadError);
+          toast.error('Upload gambar gagal, namun produk akan disimpan tanpa gambar');
+          // Continue without image
+        }
+      }
+
+      const productData = {
+        name: formData.name,
+        category: formData.category,
+        price: formData.price,
+        description: `Produk ${formData.name} kategori ${formData.category}`,
+        image: imageUrl,
+        isNew: formData.isNew,
+      };
+
+      console.log('Saving product data:', productData);
+
+      if (editingProduct) {
+        await updateDoc(doc(db, 'products', editingProduct.id), productData);
+        toast.success('Produk berhasil diperbarui');
+      } else {
+        await addDoc(collection(db, 'products'), productData);
+        toast.success('Produk berhasil ditambahkan');
+      }
+
+      // Reset form
+      setFormData({
+        name: '',
+        price: '',
+        category: 'Tas',
+        isNewCategory: false,
+        newCategoryName: '',
+        imageFile: null,
+        isNew: false,
+      });
+
+      // Reset file input
+      const fileInput = document.getElementById('image') as HTMLInputElement;
+      if (fileInput) {
+        fileInput.value = '';
+      }
+
+      setEditingProduct(null);
+      setIsDialogOpen(false);
+    } catch (error) {
+      console.error('Submit error:', error);
+      toast.error('Terjadi kesalahan: ' + (error as Error).message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   useEffect(() => {
     if (!user || !isAdmin) {
@@ -64,71 +184,14 @@ const AdminDashboard = () => {
     navigate('/login');
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    if (type === 'checkbox') {
-      setFormData(prev => ({ ...prev, [name]: (e.target as HTMLInputElement).checked }));
-    } else if (type === 'file') {
-      setFormData(prev => ({ ...prev, imageFile: (e.target as HTMLInputElement).files?.[0] || null }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
-  };
-
-  const uploadImage = async (file: File): Promise<string> => {
-    const storageRef = ref(storage, `products/${Date.now()}_${file.name}`);
-    await uploadBytes(storageRef, file);
-    return await getDownloadURL(storageRef);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      let imageUrl = editingProduct?.image || '';
-
-      if (formData.imageFile) {
-        imageUrl = await uploadImage(formData.imageFile);
-      }
-
-      const productData = {
-        name: formData.name,
-        category: formData.category,
-        price: formData.price,
-        description: formData.description,
-        image: imageUrl,
-        isNew: formData.isNew,
-      };
-
-      if (editingProduct) {
-        await updateDoc(doc(db, 'products', editingProduct.id), productData);
-        toast.success('Produk berhasil diperbarui');
-      } else {
-        await addDoc(collection(db, 'products'), productData);
-        toast.success('Produk berhasil ditambahkan');
-      }
-
-      setFormData({
-        name: '',
-        category: '',
-        price: '',
-        description: '',
-        imageFile: null,
-        isNew: false,
-      });
-      setEditingProduct(null);
-      setIsDialogOpen(false);
-    } catch (error) {
-      toast.error('Terjadi kesalahan');
-    }
-  };
-
   const handleEdit = (product: Product) => {
     setEditingProduct(product);
     setFormData({
       name: product.name,
-      category: product.category,
       price: product.price,
-      description: product.description,
+      category: product.category,
+      isNewCategory: product.category !== 'Tas',
+      newCategoryName: product.category !== 'Tas' ? product.category : '',
       imageFile: null,
       isNew: product.isNew,
     });
@@ -228,9 +291,10 @@ const AdminDashboard = () => {
     setEditingProduct(null);
     setFormData({
       name: '',
-      category: '',
       price: '',
-      description: '',
+      category: 'Tas',
+      isNewCategory: false,
+      newCategoryName: '',
       imageFile: null,
       isNew: false,
     });
@@ -309,48 +373,52 @@ const AdminDashboard = () => {
                             name="name"
                             value={formData.name}
                             onChange={handleInputChange}
+                            placeholder="Masukkan nama produk"
                             required
                           />
                         </div>
                         <div>
-                          <Label htmlFor="category">Kategori</Label>
-                          <Input
-                            id="category"
-                            name="category"
-                            value={formData.category}
-                            onChange={handleInputChange}
-                            required
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="price">Harga</Label>
+                          <Label htmlFor="price">Harga (harus dimulai dengan "Rp.")</Label>
                           <Input
                             id="price"
                             name="price"
                             value={formData.price}
                             onChange={handleInputChange}
+                            placeholder="Rp. 50.000"
                             required
                           />
                         </div>
-                        <div>
-                          <Label htmlFor="description">Deskripsi</Label>
-                          <Textarea
-                            id="description"
-                            name="description"
-                            value={formData.description}
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            id="isNewCategory"
+                            name="isNewCategory"
+                            checked={formData.isNewCategory}
                             onChange={handleInputChange}
-                            required
                           />
+                          <Label htmlFor="isNewCategory">Kategori baru selain Tas?</Label>
                         </div>
+                        {formData.isNewCategory && (
+                          <div>
+                            <Label htmlFor="newCategoryName">Nama Kategori Baru</Label>
+                            <Input
+                              id="newCategoryName"
+                              name="newCategoryName"
+                              value={formData.newCategoryName}
+                              onChange={handleInputChange}
+                              placeholder="Contoh: Sepatu, Baju, dll"
+                              required
+                            />
+                          </div>
+                        )}
                         <div>
-                          <Label htmlFor="image">Foto Produk</Label>
+                          <Label htmlFor="image">Foto Produk (opsional)</Label>
                           <Input
                             id="image"
                             name="image"
                             type="file"
                             accept="image/*"
                             onChange={handleInputChange}
-                            required={!editingProduct}
                           />
                         </div>
                         <div className="flex items-center space-x-2">
@@ -363,8 +431,8 @@ const AdminDashboard = () => {
                           />
                           <Label htmlFor="isNew">Produk Baru</Label>
                         </div>
-                        <Button type="submit" className="w-full">
-                          {editingProduct ? 'Perbarui' : 'Tambah'} Produk
+                        <Button type="submit" className="w-full" disabled={isSubmitting}>
+                          {isSubmitting ? 'Menyimpan...' : (editingProduct ? 'Perbarui' : 'Tambah') + ' Produk'}
                         </Button>
                       </form>
                     </DialogContent>

@@ -35,8 +35,11 @@ const GuestDashboard = () => {
       </Helmet>
 
       <div className="min-h-screen bg-background">
-        {/* Logout Button */}
-        <div className="fixed top-4 right-4 z-50">
+        {/* Control Buttons */}
+        <div className="fixed top-4 right-4 z-50 flex gap-2">
+          <Button onClick={() => navigate('/login')} variant="outline" size="sm">
+            ← Kembali ke Login
+          </Button>
           <Button onClick={handleLogout} variant="outline" size="sm">
             <LogOut className="w-4 h-4 mr-2" />
             Logout

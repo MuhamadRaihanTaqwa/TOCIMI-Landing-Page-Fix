@@ -16,12 +16,11 @@ interface Product {
   isNew: boolean;
 }
 
-const categories = ["Semua", "Tas"];
-
 const Products = () => {
   const { cart, favorites, cartCount, favoritesCount, addToCart, removeFromCart, toggleFavorite, isInCart, isFavorite } = useCart();
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>(["Semua"]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, 'products'), (snapshot) => {
@@ -30,6 +29,10 @@ const Products = () => {
         ...doc.data()
       })) as Product[];
       setProducts(productsData);
+
+      // Extract unique categories and add "Semua"
+      const uniqueCategories = Array.from(new Set(productsData.map(p => p.category)));
+      setCategories(["Semua", ...uniqueCategories]);
     });
 
     return unsubscribe;
