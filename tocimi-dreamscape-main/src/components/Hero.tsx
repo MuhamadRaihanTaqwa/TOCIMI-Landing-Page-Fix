@@ -32,7 +32,7 @@ const Hero = () => {
         <div className="max-w-2xl">
           <div className="inline-flex items-center gap-2 bg-accent px-4 py-2 rounded-full mb-6 animate-fade-in">
             <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-foreground">Koleksi Terbaru 2025</span>
+            <span className="text-sm font-medium text-foreground">Koleksi Terbaru 2026</span>
           </div>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 animate-fade-in-up leading-tight" style={{ animationDelay: "0.2s" }}>

@@ -1,12 +1,31 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Menu, X, ShoppingBag, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from 'sonner';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
   const { cartCount, favoritesCount } = useCart();
+
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [adminEmail, setAdminEmail] = useState('tocimifashionshop5@gmail.com');
+  const [adminPassword, setAdminPassword] = useState('');
+  const { login } = useAuth();
 
   const navLinks = [
     { name: "Home", href: "#home" },
@@ -43,6 +62,19 @@ const Navbar = () => {
     }
   };
 
+  const handleAdminSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await login(adminEmail, adminPassword);
+      toast.success('Login berhasil');
+      setIsAdminOpen(false);
+      setAdminPassword('');
+      navigate('/admin');
+    } catch (error) {
+      toast.error('Login gagal. Periksa email dan password.');
+    }
+  }; 
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-4">
@@ -76,7 +108,14 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-4">
             <Button
               variant="ghost"
-              size="icon"
+              size="sm"
+              className="hover:bg-accent"
+              onClick={() => setIsAdminOpen(true)}
+            >
+              Admin
+            </Button> 
+
+            <Button
               className="hover:bg-accent relative"
               onClick={scrollToFavorites}
             >
@@ -91,8 +130,6 @@ const Navbar = () => {
               )}
             </Button>
             <Button
-              variant="ghost"
-              size="icon"
               className="hover:bg-accent relative"
               onClick={scrollToCart}
             >
@@ -133,7 +170,15 @@ const Navbar = () => {
               <div className="flex items-center gap-4 pt-4 border-t border-border">
                 <Button
                   variant="ghost"
-                  size="icon"
+                  size="sm"
+                  onClick={() => {
+                    setIsAdminOpen(true);
+                    setIsOpen(false);
+                  }}
+                >
+                  Admin
+                </Button> 
+                <Button
                   className="hover:bg-accent relative"
                   onClick={() => {
                     scrollToFavorites();
@@ -151,8 +196,6 @@ const Navbar = () => {
                   )}
                 </Button>
                 <Button
-                  variant="ghost"
-                  size="icon"
                   className="hover:bg-accent relative"
                   onClick={() => {
                     scrollToCart();
@@ -173,6 +216,44 @@ const Navbar = () => {
             </div>
           </div>
         )}
+        {/* Admin Login Modal */}
+        <Dialog open={isAdminOpen} onOpenChange={setIsAdminOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Login Admin</DialogTitle>
+              <DialogDescription>Masukkan email dan password admin untuk mengakses dashboard</DialogDescription>
+            </DialogHeader>
+
+            <form onSubmit={handleAdminSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="admin-email">Email</Label>
+                <Input
+                  id="admin-email"
+                  type="email"
+                  value={adminEmail}
+                  onChange={(e) => setAdminEmail(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="admin-password">Password</Label>
+                <Input
+                  id="admin-password"
+                  type="password"
+                  value={adminPassword}
+                  onChange={(e) => setAdminPassword(e.target.value)}
+                  required
+                />
+              </div>
+
+              <DialogFooter>
+                <Button type="submit">Login</Button>
+                <Button type="button" onClick={() => setIsAdminOpen(false)}>Cancel</Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
     </nav>
   );

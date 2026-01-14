@@ -1,46 +1,30 @@
 import { Star, Quote } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import { db } from "@/lib/firebase";
+import { collection, onSnapshot } from "firebase/firestore";
 
-const testimonials = [
-  {
-    id: 1,
-    name: "Anisa Putri",
-    role: "Fashion Enthusiast",
-    content:
-      "Produk TOCIMI selalu berkualitas tinggi! Dress yang saya beli sangat nyaman dan elegan. Pasti akan belanja lagi!",
-    rating: 5,
-    avatar: "AP",
-  },
-  {
-    id: 2,
-    name: "Dewi Kartika",
-    role: "Beauty Blogger",
-    content:
-      "Makeup collection mereka luar biasa! Warna-warnanya cantik dan tahan lama. Sangat recommended untuk semua wanita.",
-    rating: 5,
-    avatar: "DK",
-  },
-  {
-    id: 3,
-    name: "Rina Maharani",
-    role: "Content Creator",
-    content:
-      "Pelayanan sangat ramah dan pengiriman cepat. Tas yang saya order sangat sesuai dengan foto. Love it!",
-    rating: 5,
-    avatar: "RM",
-  },
-  {
-    id: 4,
-    name: "Sarah Amelia",
-    role: "Professional",
-    content:
-      "Sepatu heels nya super nyaman dipakai seharian. Desainnya cantik dan elegan. Worth every penny!",
-    rating: 5,
-    avatar: "SA",
-  },
-];
+interface Testimonial {
+  id: string;
+  name: string;
+  role: string;
+  content: string;
+  rating: number;
+  avatar?: string;
+}
 
 const Testimonials = () => {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'testimonials'), (snapshot) => {
+      const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as Testimonial[];
+      setTestimonials(data);
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <section id="testimonials" className="py-20 bg-card">
       <div className="container mx-auto px-4">

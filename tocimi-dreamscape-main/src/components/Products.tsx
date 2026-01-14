@@ -46,11 +46,11 @@ const Products = () => {
     setSelectedCategory(category);
   };
 
-  const handleAddToCart = (product: any) => {
+  const handleAddToCart = (product: Product) => {
     addToCart(product);
   };
 
-  const handleToggleFavorite = (product: any) => {
+  const handleToggleFavorite = (product: Product) => {
     toggleFavorite(product);
   };
 

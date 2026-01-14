@@ -12,7 +12,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import { LogOut } from "lucide-react";
 
 const GuestDashboard = () => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -35,16 +35,15 @@ const GuestDashboard = () => {
       </Helmet>
 
       <div className="min-h-screen bg-background">
-        {/* Control Buttons */}
-        <div className="fixed top-4 right-4 z-50 flex gap-2">
-          <Button onClick={() => navigate('/login')} variant="outline" size="sm">
-            ← Kembali ke Login
-          </Button>
-          <Button onClick={handleLogout} variant="outline" size="sm">
-            <LogOut className="w-4 h-4 mr-2" />
-            Logout
-          </Button>
-        </div>
+        {/* Control Buttons (visible when user is authenticated) */}
+        {user && (
+          <div className="fixed top-4 right-4 z-50 flex gap-2">
+            <Button onClick={handleLogout} variant="outline" size="sm">
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </Button>
+          </div>
+        )}
 
         <Navbar />
         <main>
